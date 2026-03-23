@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: campus_bites_db
+    environment:
+      POSTGRES_USER: campus_bites
+      POSTGRES_PASSWORD: campus_bites_pass
+      POSTGRES_DB: campus_bites
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data:/data
+
+volumes:
+  postgres_data:
