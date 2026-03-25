@@ -16,13 +16,13 @@ Local PostgreSQL database for analyzing campus food delivery orders.
 
 2. **Start the database**
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
    This creates the `orders` table and loads the CSV data automatically on first run.
 
 3. **Connect to the database**
    ```bash
-   docker exec -it campus_bites_db psql -U campus_bites
+   docker compose exec db psql -U postgres -d campus_bites
    ```
 
 4. **Run queries**
@@ -32,37 +32,37 @@ Local PostgreSQL database for analyzing campus food delivery orders.
 
 ## Database Schema
 
-| Column             | Type          | Description                    |
-|--------------------|---------------|--------------------------------|
-| order_id           | INTEGER       | Primary key                    |
-| order_date         | DATE          | Date of order                  |
-| order_time         | TIME          | Time of order                  |
+| Column             | Type          | Description                            |
+|--------------------|---------------|----------------------------------------|
+| order_id           | INTEGER       | Primary key                            |
+| order_date         | DATE          | Date of order                          |
+| order_time         | TIME          | Time of order                          |
 | customer_segment   | VARCHAR(50)   | Customer type (Dorm, Greek Life, etc.) |
-| order_value        | DECIMAL(10,2) | Order total in dollars         |
-| cuisine_type       | VARCHAR(50)   | Type of food ordered           |
-| delivery_time_mins | INTEGER       | Delivery time in minutes       |
-| promo_code_used    | VARCHAR(10)   | Yes/No                         |
-| is_reorder         | VARCHAR(10)   | Yes/No                         |
+| order_value        | DECIMAL(10,2) | Order total in dollars                 |
+| cuisine_type       | VARCHAR(50)   | Type of food ordered                   |
+| delivery_time_mins | INTEGER       | Delivery time in minutes               |
+| promo_code_used    | BOOLEAN       | Whether a promo code was used          |
+| is_reorder         | BOOLEAN       | Whether this is a repeat order         |
 
 ## Useful Commands
 
 ```bash
 # Stop the database
-docker-compose down
+docker compose down
 
 # Stop and delete all data (fresh start)
-docker-compose down -v
+docker compose down -v
 
 # View container logs
-docker-compose logs postgres
+docker compose logs db
 ```
 
 ## Connection Details
 
-| Property | Value            |
-|----------|------------------|
-| Host     | localhost        |
-| Port     | 5432             |
-| Database | campus_bites     |
-| User     | campus_bites     |
-| Password | campus_bites_pass|
+| Property | Value        |
+|----------|--------------|
+| Host     | localhost    |
+| Port     | 5432         |
+| Database | campus_bites |
+| User     | postgres     |
+| Password | postgres     |

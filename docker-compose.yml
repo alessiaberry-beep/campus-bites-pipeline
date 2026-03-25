@@ -1,17 +1,20 @@
 services:
-  postgres:
+  db:
     image: postgres:16
     container_name: campus_bites_db
     environment:
-      POSTGRES_USER: campus_bites
-      POSTGRES_PASSWORD: campus_bites_pass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: campus_bites
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d campus_bites"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
