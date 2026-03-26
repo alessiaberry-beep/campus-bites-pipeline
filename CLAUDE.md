@@ -18,24 +18,24 @@ docker compose down
 # Fresh start (delete all data)
 docker compose down -v
 
+# View container logs
+docker compose logs db
+
 # Connect to database
 docker compose exec db psql -U postgres -d campus_bites
 
-# Load data (requires venv activated)
+# Load data (safe to re-run; uses ON CONFLICT DO NOTHING)
 source venv/bin/activate
-pip install pandas psycopg2-binary
 python load_orders.py
 ```
 
 ## Architecture
 
-- **docker-compose.yml**: PostgreSQL 16 container configuration
-- **load_orders.py**: Python script that reads CSV, converts Yes/No to booleans, creates table, and inserts data
+- **docker-compose.yml**: PostgreSQL 16 container with healthcheck and persistent volume
+- **load_orders.py**: Python script that reads CSV, converts Yes/No to booleans, creates table, and inserts data (idempotent)
 - **data/campus_bites_orders.csv**: Source data file
 
 ## Database
 
-- **Host**: localhost:5432
-- **Database**: campus_bites
-- **User/Password**: postgres/postgres
-- **Table**: orders (order_id, order_date, order_time, customer_segment, order_value, cuisine_type, delivery_time_mins, promo_code_used, is_reorder)
+- **Connection**: localhost:5432, database `campus_bites`, user/password `postgres/postgres`
+- **Table**: `orders` with columns: order_id (PK), order_date, order_time, customer_segment, order_value, cuisine_type, delivery_time_mins, promo_code_used (bool), is_reorder (bool)
